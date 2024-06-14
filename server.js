@@ -18,23 +18,26 @@ app.use(express.urlencoded({ extended: false }));
 app.get('/', async (req, res) => {
   try {
     const shortUrls = await ShortUrl.find();
-    res.render('index', { shortUrls: shortUrls });
+    res.render('index', { shortUrls: shortUrls, currenttime: new Date() });
   } catch (err) {
     console.error(err);
     res.status(500).send('Internal Server Error');
   }
+ 
 });
 
 app.post('/shortUrls', async (req, res) => {
+  const { fullUrl, txt } = req.body;
   try {
-    await ShortUrl.create({ full: req.body.fullUrl });
-    console.log(req.body.fullUrl)
+    const shortUrl = await ShortUrl.create({ full: fullUrl, text: txt });
+    console.log('Created short URL:', shortUrl);
     res.redirect('/');
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
+    console.error('Error creating short URL:', err);
+    res.status(500).send('Error creating short URL');
   }
 });
+
 
 app.get('/:shortUrl', async (req, res) => {
   try {

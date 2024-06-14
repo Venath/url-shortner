@@ -1,8 +1,12 @@
-const mongoose = require('mongoose')
-const shortId = require('shortid')
+const mongoose = require('mongoose');
+const shortId = require('shortid');
 
 const shortUrlSchema = new mongoose.Schema({
   full: {
+    type: String,
+    required: true
+  },
+  text: {
     type: String,
     required: true
   },
@@ -10,8 +14,7 @@ const shortUrlSchema = new mongoose.Schema({
     type: String,
     required: true,
     default: function() {
-      // Generate short ID and prepend 'abc'
-      return 'abc-' + shortId.generate();
+      return this.text +'-'+  shortId.generate();
     }
   },
   clicks: {
@@ -19,6 +22,6 @@ const shortUrlSchema = new mongoose.Schema({
     required: true,
     default: 0
   }
-})
+});
 
-module.exports = mongoose.model('ShortUrl', shortUrlSchema)
+module.exports = mongoose.model('ShortUrl', shortUrlSchema);
