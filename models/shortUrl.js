@@ -9,7 +9,10 @@ const shortUrlSchema = new mongoose.Schema({
   short: {
     type: String,
     required: true,
-    default: shortId.generate
+    default: function() {
+      // Generate short ID and prepend 'abc'
+      return 'abc-' + shortId.generate();
+    }
   },
   clicks: {
     type: Number,
